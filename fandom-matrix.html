@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fandom Matrix Diagnostic</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --cream: #f5f0e6;
+      --cream-dark: #ebe5d9;
+      --cream-light: #faf8f4;
+      --black: #1a1a1a;
+      --red: #c94432;
+      --blue: #2d4a8c;
+      --amber: #d4a03c;
+      --gray: #8a8577;
+      --gray-light: #b5b0a3;
+    }
+    
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--black);
+      min-height: 100vh;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    
+    .hidden { display: none !important; }
+    
+    /* ======================================== FIXED HEADER ======================================== */
+    .fixed-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+    
+    .fixed-header .logo {
+      color: var(--cream);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+    }
+    
+    .fixed-header .reset-btn {
+      background: transparent;
+      border: 1px solid var(--cream);
+      color: var(--cream);
+      padding: 6px 14px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    
+    .fixed-header .reset-btn:hover {
+      background: var(--cream);
+      color: var(--black);
+    }
+    
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 24px 20px;
+    }
+    
+    .container.with-header {
+      padding-top: 80px;
+    }
+    
+    /* ======================================== LANDING PAGE ======================================== */
+    .landing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .landing-header {
+      padding: 32px 24px;
+      border-bottom: 3px solid var(--black);
+    }
+    
+    .landing-logo {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    
+    .landing-logo .mark {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+    
+    .landing-logo .version {
+      font-size: 10px;
+      color: var(--gray);
+      letter-spacing: 0.1em;
+    }
+    
+    .landing-hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 24px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    
+    .landing-hero h1 {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+    
+    .landing-hero h1 .accent-red { color: var(--red); }
+    .landing-hero h1 .accent-blue { color: var(--blue); }
+    
+    .landing-subtitle {
+      font-size: 15px;
+      color: var(--gray);
+      line-height: 1.7;
+      margin-bottom: 40px;
+      max-width: 480px;
+    }
+    
+    /* Bento Blocks */
+    .landing-blocks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+      background: var(--black);
+      padding: 3px;
+      margin-bottom: 40px;
+    }
+    
+    @media (max-width: 600px) {
+      .landing-blocks { grid-template-columns: 1fr; }
+    }
+    
+    .landing-block {
+      background: var(--cream-light);
+      padding: 24px;
+    }
+    
+    .landing-block.alt {
+      background: var(--cream);
+    }
+    
+    .landing-block-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .landing-block-label .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--gray-light);
+    }
+    
+    .landing-block.alt .landing-block-label .dot {
+      background: var(--red);
+    }
+    
+    .landing-block p {
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    
+    .landing-block p strong {
+      font-weight: 600;
+    }
+    
+    .landing-block .desc {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+    
+    /* CTA */
+    .landing-cta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    
+    .start-btn {
+      background: var(--black);
+      color: var(--cream);
+      border: none;
+      padding: 16px 40px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    
+    .start-btn:hover {
+      background: var(--red);
+    }
+    
+    .landing-hint {
+      font-size: 11px;
+      color: var(--gray);
+    }
+    
+    /* Geometric decoration */
+    .landing-decoration {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      display: flex;
+      gap: 12px;
+      opacity: 0.15;
+    }
+    
+    .deco-shape {
+      width: 48px;
+      height: 48px;
+    }
+    
+    .deco-shape.circle {
+      background: var(--black);
+      border-radius: 50%;
+    }
+    
+    .deco-shape.square {
+      background: var(--black);
+    }
+    
+    .deco-shape.triangle {
+      width: 0;
+      height: 0;
+      border-left: 24px solid transparent;
+      border-right: 24px solid transparent;
+      border-bottom: 48px solid var(--black);
+    }
+    
+    /* ======================================== QUESTIONS ======================================== */
+    .question-section {
+      padding-bottom: 60px;
+    }
+    
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .progress-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+    
+    .axis-badge {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      color: var(--cream);
+    }
+    
+    .axis-badge.x-axis { background: var(--blue); }
+    .axis-badge.y-axis { background: var(--red); }
+    
+    .progress-bar {
+      height: 4px;
+      background: var(--cream-dark);
+      margin-bottom: 32px;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--black);
+      transition: width 0.3s;
+    }
+    
+    /* Question Card */
+    .question-card {
+      background: var(--black);
+      padding: 3px;
+      margin-bottom: 24px;
+    }
+    
+    .question-card-inner {
+      background: var(--cream-light);
+      padding: 32px 24px;
+    }
+    
+    .question-category {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 12px;
+    }
+    
+    .question-text {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 32px;
+    }
+    
+    /* Slider */
+    .slider-container {
+      margin-bottom: 16px;
+    }
+    
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 8px;
+      background: var(--cream-dark);
+      outline: none;
+      cursor: pointer;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 28px;
+      height: 28px;
+      background: var(--black);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb:hover {
+      background: var(--red);
+    }
+    
+    input[type="range"]::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+      background: var(--black);
+      cursor: pointer;
+      border: none;
+    }
+    
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    
+    .slider-label {
+      flex: 1;
+    }
+    
+    .slider-label.right {
+      text-align: right;
+    }
+    
+    .slider-label-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+    
+    .slider-label-desc {
+      font-size: 12px;
+      color: var(--gray);
+    }
+    
+    /* Navigation */
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .nav-btn {
+      flex: 1;
+      padding: 16px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    
+    .nav-btn.back {
+      flex: 1;
+      background: transparent;
+      border: 2px solid var(--black);
+      color: var(--black);
+    }
+    
+    .nav-btn.next {
+      flex: 2;
+      background: var(--black);
+      border: none;
+      color: var(--cream);
+    }
+    
+    .nav-btn.next:hover {
+      background: var(--red);
+    }
+    
+    /* ======================================== LOADING ======================================== */
+    .loading-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    
+    .loading-content {
+      text-align: center;
+    }
+    
+    .loading-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 32px;
+    }
+    
+    .loading-box {
+      width: 48px;
+      height: 48px;
+      background: var(--black);
+      margin: 0 auto;
+      animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    
+    /* ======================================== RESULTS ======================================== */
+    .result-header {
+      margin-bottom: 32px;
+    }
+    
+    .result-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 8px;
+    }
+    
+    .result-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .result-description {
+      font-size: 15px;
+      color: var(--gray);
+      max-width: 500px;
+      line-height: 1.6;
+    }
+    
+    /* Matrix Visualization */
+    .matrix-container {
+      background: var(--black);
+      padding: 3px;
+      margin-bottom: 32px;
+    }
+    
+    .matrix-inner {
+      background: var(--cream-light);
+      padding: 24px;
+    }
+    
+    .matrix-grid {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      aspect-ratio: 1;
+      position: relative;
+    }
+    
+    .matrix-line-h {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--cream-dark);
+    }
+    
+    .matrix-line-v {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--cream-dark);
+    }
+    
+    .quadrant-label {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--gray-light);
+      text-align: center;
+      white-space: pre-line;
+      line-height: 1.4;
+    }
+    
+    .quadrant-label.tl { left: 25%; top: 25%; }
+    .quadrant-label.tr { left: 75%; top: 25%; }
+    .quadrant-label.bl { left: 25%; top: 75%; }
+    .quadrant-label.br { left: 75%; top: 75%; }
+    
+    .axis-label {
+      position: absolute;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--gray);
+    }
+    
+    .axis-label.top {
+      top: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .axis-label.bottom {
+      bottom: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .axis-label.left {
+      left: -14px;
+      top: 50%;
+      transform: translateY(-50%) rotate(-90deg);
+    }
+    
+    .axis-label.right {
+      right: -14px;
+      top: 50%;
+      transform: translateY(-50%) rotate(90deg);
+    }
+    
+    .position-dot {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 3px solid var(--cream-light);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      animation: plotDot 0.6s ease-out;
+    }
+    
+    @keyframes plotDot {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+      50% { transform: translate(-50%, -50%) scale(1.3); }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    
+    /* Strategy Cards */
+    .strategy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      background: var(--black);
+      padding: 3px;
+      margin-bottom: 32px;
+    }
+    
+    @media (max-width: 600px) {
+      .strategy-grid { grid-template-columns: 1fr; }
+    }
+    
+    .strategy-card {
+      background: var(--cream-light);
+      padding: 20px;
+    }
+    
+    .strategy-card-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    
+    .strategy-card-label.opportunity { color: var(--blue); }
+    .strategy-card-label.risk { color: var(--red); }
+    .strategy-card-label.strategy { color: var(--amber); }
+    
+    .strategy-card p {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    /* Examples */
+    .examples-box {
+      background: var(--cream-dark);
+      padding: 20px;
+      margin-bottom: 32px;
+    }
+    
+    .examples-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 12px;
+    }
+    
+    .examples-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .example-tag {
+      background: var(--cream);
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    /* Coordinates */
+    .coordinates {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      padding: 16px;
+      background: var(--cream-light);
+      font-size: 11px;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+    
+    .coordinates .label {
+      color: var(--gray);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LANDING SCREEN -->
+  <div id="landing" class="landing">
+    <header class="landing-header">
+      <div class="landing-logo">
+        <span class="mark">FANDOM MATRIX</span>
+        <span class="version">DIAGNOSTIC v1.0</span>
+      </div>
+    </header>
+    
+    <main class="landing-hero">
+      <h1>
+        Map your fandom by <span class="accent-red">emotional weather</span> and <span class="accent-blue">fan behavior</span>
+      </h1>
+      
+      <p class="landing-subtitle">
+        8 questions. 2 minutes. Discover where your brand, community, or fandom sits on the matrix—and what strategic opportunities that unlocks.
+      </p>
+      
+      <div class="landing-blocks">
+        <div class="landing-block">
+          <div class="landing-block-label">
+            <div class="dot"></div>
+            X-AXIS
+          </div>
+          <p><strong>Emotional Tone</strong></p>
+          <p class="desc">Warm & cozy ← → Intense & dramatic</p>
+        </div>
+        <div class="landing-block alt">
+          <div class="landing-block-label">
+            <div class="dot"></div>
+            Y-AXIS
+          </div>
+          <p><strong>Fan Behavior</strong></p>
+          <p class="desc">Consumptive ← → Participatory</p>
+        </div>
+      </div>
+      
+      <div class="landing-cta">
+        <button class="start-btn" onclick="startDiagnostic()">Start Diagnostic</button>
+        <span class="landing-hint">~2 min</span>
+      </div>
+    </main>
+    
+    <div class="landing-decoration">
+      <div class="deco-shape circle"></div>
+      <div class="deco-shape square"></div>
+      <div class="deco-shape triangle"></div>
+    </div>
+  </div>
+
+  <!-- QUESTIONS SCREEN -->
+  <div id="questions" class="hidden">
+    <header class="fixed-header">
+      <span class="logo">FANDOM MATRIX</span>
+      <button class="reset-btn" onclick="resetApp()">RESET</button>
+    </header>
+    
+    <div class="container with-header">
+      <div class="question-section">
+        <div class="progress-header">
+          <span class="progress-label" id="progress-text">Question 1 of 8</span>
+          <span class="axis-badge" id="axis-badge">EMOTIONAL TONE</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 12.5%"></div>
+        </div>
+        
+        <div class="question-card">
+          <div class="question-card-inner">
+            <div class="question-category" id="question-category">Conflict Orientation</div>
+            <h2 class="question-text" id="question-text">Does engagement with this brand feel like a refuge from the world, or a way to engage with its intensity?</h2>
+            
+            <div class="slider-container">
+              <input type="range" id="slider" min="0" max="100" value="50" oninput="updateSlider(this.value)">
+            </div>
+            
+            <div class="slider-labels">
+              <div class="slider-label">
+                <div class="slider-label-title" id="left-label">REFUGE</div>
+                <div class="slider-label-desc" id="left-desc">Safe haven, escape, comfort</div>
+              </div>
+              <div class="slider-label right">
+                <div class="slider-label-title" id="right-label">INTENSITY</div>
+                <div class="slider-label-desc" id="right-desc">Excitement, drama, stakes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="nav-buttons">
+          <button class="nav-btn back hidden" id="back-btn" onclick="goBack()">Back</button>
+          <button class="nav-btn next" id="next-btn" onclick="goNext()">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING SCREEN -->
+  <div id="loading" class="hidden">
+    <div class="loading-section">
+      <div class="loading-content">
+        <div class="loading-title">Calculating your position...</div>
+        <div class="loading-box"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="results" class="hidden">
+    <header class="fixed-header">
+      <span class="logo">FANDOM MATRIX</span>
+      <button class="reset-btn" onclick="resetApp()">START OVER</button>
+    </header>
+    
+    <div class="container with-header">
+      <div class="result-header">
+        <div class="result-label">YOUR QUADRANT</div>
+        <h1 class="result-title" id="result-title">Sanctuary Builders</h1>
+        <p class="result-description" id="result-description">Fans create cozy, welcoming communities centered on shared rituals and gentle creativity.</p>
+      </div>
+      
+      <div class="matrix-container">
+        <div class="matrix-inner">
+          <div class="matrix-grid">
+            <div class="matrix-line-h"></div>
+            <div class="matrix-line-v"></div>
+            
+            <div class="quadrant-label tl">Sanctuary<br>Builders</div>
+            <div class="quadrant-label tr">Drama<br>Collective</div>
+            <div class="quadrant-label bl">Comfort<br>Cocoons</div>
+            <div class="quadrant-label br">Fierce<br>Loyalists</div>
+            
+            <div class="axis-label top">PARTICIPATORY</div>
+            <div class="axis-label bottom">CONSUMPTIVE</div>
+            <div class="axis-label left">WARM</div>
+            <div class="axis-label right">INTENSE</div>
+            
+            <div class="position-dot" id="position-dot"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="strategy-grid">
+        <div class="strategy-card">
+          <div class="strategy-card-label opportunity">OPPORTUNITY</div>
+          <p id="result-opportunity">Become a shared ritual</p>
+        </div>
+        <div class="strategy-card">
+          <div class="strategy-card-label risk">RISK</div>
+          <p id="result-risk">Commercialization breaks the spell</p>
+        </div>
+        <div class="strategy-card">
+          <div class="strategy-card-label strategy">STRATEGY</div>
+          <p id="result-strategy">Facilitate, don't intrude</p>
+        </div>
+      </div>
+      
+      <div class="examples-box">
+        <div class="examples-label">BRANDS IN THIS QUADRANT</div>
+        <div class="examples-tags" id="examples-tags"></div>
+      </div>
+      
+      <div class="coordinates">
+        <span>X: <span id="coord-x">50</span> <span class="label">(Emotional Tone)</span></span>
+        <span>Y: <span id="coord-y">50</span> <span class="label">(Fan Behavior)</span></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Questions data
+    const questions = [
+      {
+        id: 'conflict',
+        axis: 'x',
+        label: 'Conflict Orientation',
+        question: 'Does engagement with this brand feel like a refuge from the world, or a way to engage with its intensity?',
+        leftLabel: 'REFUGE',
+        rightLabel: 'INTENSITY',
+        leftDesc: 'Safe haven, escape, comfort',
+        rightDesc: 'Excitement, drama, stakes'
+      },
+      {
+        id: 'emotional',
+        axis: 'x',
+        label: 'Emotional Signature',
+        question: "What's the dominant feeling state fans experience?",
+        leftLabel: 'COMFORT',
+        rightLabel: 'TENSION',
+        leftDesc: 'Nostalgia, warmth, peace',
+        rightDesc: 'Anticipation, thrill, edge'
+      },
+      {
+        id: 'stakes',
+        axis: 'x',
+        label: 'Stakes Perception',
+        question: 'How do fans experience their engagement?',
+        leftLabel: 'LOW STAKES',
+        rightLabel: 'HIGH STAKES',
+        leftDesc: 'Casual enjoyment, relaxation',
+        rightDesc: 'Deep investment, urgency'
+      },
+      {
+        id: 'perception',
+        axis: 'x',
+        label: 'External Perception',
+        question: 'How do outsiders typically view this fandom?',
+        leftLabel: 'WHOLESOME',
+        rightLabel: 'INTENSE',
+        leftDesc: '"That\'s nice" or "So cute"',
+        rightDesc: '"That\'s wild" or "Those fans..."'
+      },
+      {
+        id: 'creation',
+        axis: 'y',
+        label: 'Creation vs Consumption',
+        question: 'What do fans primarily do?',
+        leftLabel: 'CONSUME',
+        rightLabel: 'CREATE',
+        leftDesc: 'Watch, buy, signal identity',
+        rightDesc: 'Make art, memes, theories, content'
+      },
+      {
+        id: 'boundary',
+        axis: 'y',
+        label: 'Community Boundaries',
+        question: 'How does the community treat newcomers?',
+        leftLabel: 'GATEKEEPING',
+        rightLabel: 'WELCOMING',
+        leftDesc: 'Tests, hierarchy, exclusivity',
+        rightDesc: 'Open arms, eager to share'
+      },
+      {
+        id: 'expression',
+        axis: 'y',
+        label: 'Expression Mode',
+        question: 'How do fans typically interact with each other?',
+        leftLabel: 'DEFEND',
+        rightLabel: 'COLLABORATE',
+        leftDesc: 'Protect, compete, argue',
+        rightDesc: 'Share, build together, expand'
+      },
+      {
+        id: 'identity',
+        axis: 'y',
+        label: 'Identity Weight',
+        question: 'How central is this fandom to fan identity?',
+        leftLabel: 'CORE IDENTITY',
+        rightLabel: 'HOBBY',
+        leftDesc: '"I am a [X] fan" defines them',
+        rightDesc: 'One of many interests'
+      }
+    ];
+
+    // Quadrant data
+    const quadrants = {
+      sanctuary: {
+        name: 'Sanctuary Builders',
+        description: 'Fans create cozy, welcoming communities centered on shared rituals and gentle creativity.',
+        examples: ['Stardew Valley', 'Studio Ghibli', 'Trader Joe\'s', 'Glossier', 'Heartstopper'],
+        opportunity: 'Become a shared ritual',
+        risk: 'Commercialization breaks the spell',
+        strategy: 'Facilitate, don\'t intrude',
+        color: '#2d4a8c'
+      },
+      drama: {
+        name: 'Drama Collective',
+        description: 'Fans thrive on real-time reactions, hot takes, and event-driven peaks of collective excitement.',
+        examples: ['BravoTV', 'Squid Game', 'NFL', 'Euphoria', 'Yes Chef Food Festival'],
+        opportunity: 'Create moments worth reacting to',
+        risk: 'Fatigue from constant intensity',
+        strategy: 'Feed the discourse cycle',
+        color: '#c94432'
+      },
+      comfort: {
+        name: 'Comfort Cocoons',
+        description: 'Fans seek personal escape and low-key belonging without the pressure of active participation.',
+        examples: ['Animal Crossing', 'The Sims', 'Harry Styles', 'BTS'],
+        opportunity: 'Be the reliable escape',
+        risk: 'Being taken for granted',
+        strategy: 'Protect the safe space',
+        color: '#d4a03c'
+      },
+      loyalist: {
+        name: 'Fierce Loyalists',
+        description: 'Fans form army-like communities where membership is identity and loyalty is paramount.',
+        examples: ['Taylor Swift', 'Beyoncé', 'Nicki Minaj', 'SKIMS', 'Chrome Hearts'],
+        opportunity: 'Become identity infrastructure',
+        risk: 'Toxicity by association',
+        strategy: 'Reward allegiance, manage conflict',
+        color: '#1a1a1a'
+      }
+    };
+
+    // State
+    let currentQuestion = 0;
+    let answers = {};
+
+    // DOM elements
+    const screens = {
+      landing: document.getElementById('landing'),
+      questions: document.getElementById('questions'),
+      loading: document.getElementById('loading'),
+      results: document.getElementById('results')
+    };
+
+    function showScreen(name) {
+      Object.values(screens).forEach(s => s.classList.add('hidden'));
+      screens[name].classList.remove('hidden');
+    }
+
+    function startDiagnostic() {
+      currentQuestion = 0;
+      answers = {};
+      showScreen('questions');
+      renderQuestion();
+    }
+
+    function resetApp() {
+      currentQuestion = 0;
+      answers = {};
+      showScreen('landing');
+    }
+
+    function renderQuestion() {
+      const q = questions[currentQuestion];
+      const progress = ((currentQuestion + 1) / questions.length) * 100;
+      
+      document.getElementById('progress-text').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+      document.getElementById('progress-fill').style.width = `${progress}%`;
+      
+      const axisBadge = document.getElementById('axis-badge');
+      axisBadge.textContent = q.axis === 'x' ? 'EMOTIONAL TONE' : 'FAN BEHAVIOR';
+      axisBadge.className = `axis-badge ${q.axis === 'x' ? 'x-axis' : 'y-axis'}`;
+      
+      document.getElementById('question-category').textContent = q.label;
+      document.getElementById('question-text').textContent = q.question;
+      document.getElementById('left-label').textContent = q.leftLabel;
+      document.getElementById('left-desc').textContent = q.leftDesc;
+      document.getElementById('right-label').textContent = q.rightLabel;
+      document.getElementById('right-desc').textContent = q.rightDesc;
+      
+      const slider = document.getElementById('slider');
+      slider.value = answers[q.id] !== undefined ? answers[q.id] : 50;
+      
+      const backBtn = document.getElementById('back-btn');
+      if (currentQuestion > 0) {
+        backBtn.classList.remove('hidden');
+      } else {
+        backBtn.classList.add('hidden');
+      }
+      
+      const nextBtn = document.getElementById('next-btn');
+      nextBtn.textContent = currentQuestion === questions.length - 1 ? 'See Results' : 'Next';
+    }
+
+    function updateSlider(value) {
+      const q = questions[currentQuestion];
+      answers[q.id] = parseInt(value);
+    }
+
+    function goBack() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        renderQuestion();
+      }
+    }
+
+    function goNext() {
+      const q = questions[currentQuestion];
+      if (answers[q.id] === undefined) {
+        answers[q.id] = 50;
+      }
+      
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        renderQuestion();
+      } else {
+        showScreen('loading');
+        setTimeout(() => {
+          calculateAndShowResults();
+        }, 1500);
+      }
+    }
+
+    function calculateAndShowResults() {
+      let xScore = 0, yScore = 0, xCount = 0, yCount = 0;
+      
+      questions.forEach(q => {
+        const val = answers[q.id];
+        if (val !== undefined) {
+          if (q.axis === 'x') {
+            xScore += val;
+            xCount++;
+          } else {
+            yScore += val;
+            yCount++;
+          }
+        }
+      });
+      
+      const xAvg = xCount > 0 ? xScore / xCount : 50;
+      const yAvg = yCount > 0 ? yScore / yCount : 50;
+      
+      let quadrant;
+      if (xAvg <= 50 && yAvg >= 50) quadrant = 'sanctuary';
+      else if (xAvg > 50 && yAvg >= 50) quadrant = 'drama';
+      else if (xAvg <= 50 && yAvg < 50) quadrant = 'comfort';
+      else quadrant = 'loyalist';
+      
+      const data = quadrants[quadrant];
+      
+      // Update results
+      document.getElementById('result-title').textContent = data.name;
+      document.getElementById('result-title').style.color = data.color;
+      document.getElementById('result-description').textContent = data.description;
+      document.getElementById('result-opportunity').textContent = data.opportunity;
+      document.getElementById('result-risk').textContent = data.risk;
+      document.getElementById('result-strategy').textContent = data.strategy;
+      
+      // Examples
+      const examplesContainer = document.getElementById('examples-tags');
+      examplesContainer.innerHTML = data.examples.map(ex => 
+        `<span class="example-tag">${ex}</span>`
+      ).join('');
+      
+      // Position dot
+      const dot = document.getElementById('position-dot');
+      dot.style.left = `${xAvg}%`;
+      dot.style.top = `${100 - yAvg}%`;
+      dot.style.background = data.color;
+      
+      // Coordinates
+      document.getElementById('coord-x').textContent = Math.round(xAvg);
+      document.getElementById('coord-y').textContent = Math.round(yAvg);
+      
+      showScreen('results');
+    }
+  </script>
+</body>
+</html>
